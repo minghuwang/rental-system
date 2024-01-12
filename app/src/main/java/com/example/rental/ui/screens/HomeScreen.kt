@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
@@ -99,31 +100,50 @@ fun resultScreen(properties: List<RentalProperty>, modifier: Modifier = Modifier
     }
 
 }
+
 @Composable
 fun propertyCard(property: RentalProperty, modifier: Modifier = Modifier) {
     Card(
         modifier = modifier
-        .padding(4.dp)
-        .fillMaxWidth()
-        .aspectRatio(1.5f),
-        shape = MaterialTheme.shapes.medium,
+            .padding(4.dp)
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .aspectRatio(4f),
+        shape = MaterialTheme.shapes.small,
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
         Column(
-            modifier = Modifier,
-            verticalArrangement = Arrangement.Center,
-        ){
-            AsyncImage(
-                model = ImageRequest.Builder(context = LocalContext.current).data(property.PictureLink)
-                    .crossfade(true).build(),
-                error = painterResource(R.drawable.ic_broken_image),
-                placeholder = painterResource(R.drawable.loading_img),
-                contentDescription = stringResource(R.string.placeholder),
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxWidth()
+            modifier = modifier,
+            verticalArrangement = Arrangement.Center
+        ) {
+//            AsyncImage(
+//                model = ImageRequest.Builder(context = LocalContext.current).data(property.PictureLink)
+//                    .crossfade(true).build(),
+//                error = painterResource(R.drawable.ic_broken_image),
+//                placeholder = painterResource(R.drawable.loading_img),
+//                contentDescription = stringResource(R.string.placeholder),
+//                contentScale = ContentScale.Crop,
+//                modifier = Modifier.fillMaxWidth()
+//            )
+
+            Text(
+                text = "PropertyID: ${property.PropertyID}",
+                style = MaterialTheme.typography.labelSmall
             )
             Text(
-                text = "${property.Address}",
+                text = "Address: ${property.Address}",
+                style = MaterialTheme.typography.labelSmall
+            )
+            Text(
+                text = "PictureLink: ${property.PictureLink}",
+                style = MaterialTheme.typography.labelSmall
+            )
+            Text(
+                text = "OpenTime1: ${property.OpenTime1}",
+                style = MaterialTheme.typography.labelSmall
+            )
+            Text(
+                text = "OpenTime2: ${property.OpenTime2}",
                 style = MaterialTheme.typography.labelSmall
             )
 
