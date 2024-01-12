@@ -13,24 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.marsphotos.fake
+package com.example.rental
 
-import com.example.marsphotos.model.MarsPhoto
+import android.app.Application
+import com.example.rental.data.AppContainer
+import com.example.rental.data.DefaultAppContainer
 
-object FakeDataSource {
-
-    private const val idOne = "img1"
-    private const val idTwo = "img2"
-    private const val imgOne = "url.one"
-    private const val imgTwo = "url.two"
-    val photosList = listOf(
-        MarsPhoto(
-            id = idOne,
-            imgSrc = imgOne
-        ),
-        MarsPhoto(
-            id = idTwo,
-            imgSrc = imgTwo
-        )
-    )
+class RentalApplication : Application() {
+    /** AppContainer instance used by the rest of classes to obtain dependencies */
+    lateinit var container: AppContainer
+    override fun onCreate() {
+        super.onCreate()
+        container = DefaultAppContainer()
+    }
 }

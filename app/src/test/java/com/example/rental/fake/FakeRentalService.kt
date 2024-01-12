@@ -13,13 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.marsphotos.fake
+package com.example.rental.fake
 
-import com.example.marsphotos.data.MarsPhotosRepository
-import com.example.marsphotos.model.MarsPhoto
+import com.example.rental.model.RentalProperty
+import com.example.rental.network.RentalService
 
-class FakeNetworkMarsPhotosRepository : MarsPhotosRepository{
-    override suspend fun getMarsPhotos(): List<MarsPhoto> {
-        return FakeDataSource.photosList
+class FakeRentalService : RentalService {
+    override suspend fun GetProperties(): List<RentalProperty> {
+        return FakeDataSource.rentalList
     }
+//    override suspend fun createProperties(RentalProperties): Boolean{
+//        return true
+//    }
+//    override suspend fun getVisitorsInfo(): List<VisitorsInfo> {
+//        return FakeDataSource.rentalList
+//    }
 }

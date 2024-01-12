@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.marsphotos
+package com.example.rental
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -24,21 +24,21 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
-import com.example.marsphotos.ui.MarsPhotosApp
-import com.example.marsphotos.ui.theme.MarsPhotosTheme
+import com.example.rental.ui.rentalApp
+import com.example.rental.ui.theme.RentalTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
-            MarsPhotosTheme {
+            RentalTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MarsPhotosApp()
+                    rentalApp()
                 }
             }
         }

@@ -13,23 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.marsphotos
+package com.example.rental
 
-import com.example.marsphotos.data.NetworkMarsPhotosRepository
-import com.example.marsphotos.fake.FakeDataSource
-import com.example.marsphotos.fake.FakeMarsApiService
+import com.example.rental.data.NetworkRentalRepository
+import com.example.rental.fake.FakeDataSource
+import com.example.rental.fake.FakeRentalService
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class NetworkMarsRepositoryTest {
+class NetworkRentalRepositoryTest {
 
     @Test
-    fun networkMarsPhotosRepository_getMarsPhotos_verifyPhotoList() =
+    fun networkRentalRepository_getRentalProperties_verifyPhotoList() =
         runTest {
-            val repository = NetworkMarsPhotosRepository(
-                marsApiService = FakeMarsApiService()
+            val repository = NetworkRentalRepository(
+                rentalService = FakeRentalService()
             )
-            assertEquals(FakeDataSource.photosList, repository.getMarsPhotos())
+            assertEquals(FakeDataSource.rentalList, repository.getRentalProperties())
         }
 }

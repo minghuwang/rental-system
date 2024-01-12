@@ -13,19 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.marsphotos.data
+package com.example.rental.data
 
-import com.example.marsphotos.network.MarsApiService
+import com.example.rental.network.RentalService
 import retrofit2.Retrofit
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 
 /**
  * Dependency Injection container at the application level.
  */
 interface AppContainer {
-    val marsPhotosRepository: MarsPhotosRepository
+    val rentalRepository: RentalRepository
 }
 
 /**
@@ -34,27 +36,36 @@ interface AppContainer {
  * Variables are initialized lazily and the same instance is shared across the whole app.
  */
 class DefaultAppContainer : AppContainer {
-    private val baseUrl = "https://android-kotlin-fun-mars-server.appspot.com/"
+    private val baseUrl = "http://192.168.1.230:8088/"
+    val interceptor : HttpLoggingInterceptor = HttpLoggingInterceptor().apply {
+        level = HttpLoggingInterceptor.Level.BODY
+    }
+
+    val client : OkHttpClient = OkHttpClient.Builder().apply {
+        addInterceptor(interceptor)
+    }.build()
+
 
     /**
      * Use the Retrofit builder to build a retrofit object using a kotlinx.serialization converter
      */
     private val retrofit: Retrofit = Retrofit.Builder()
-        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
         .baseUrl(baseUrl)
+        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+        .client(client)
         .build()
 
     /**
      * Retrofit service object for creating api calls
      */
-    private val retrofitService: MarsApiService by lazy {
-        retrofit.create(MarsApiService::class.java)
+    private val retrofitService: RentalService by lazy {
+        retrofit.create(RentalService::class.java)
     }
 
     /**
-     * DI implementation for Mars photos repository
+     * DI implementation for Rental repository
      */
-    override val marsPhotosRepository: MarsPhotosRepository by lazy {
-        NetworkMarsPhotosRepository(retrofitService)
+    override val rentalRepository: RentalRepository by lazy {
+        NetworkRentalRepository(retrofitService)
     }
 }

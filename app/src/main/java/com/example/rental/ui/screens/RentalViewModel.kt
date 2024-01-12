@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.marsphotos.ui.screens
+package com.example.rental.ui.screens
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -24,9 +24,9 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.marsphotos.MarsPhotosApplication
-import com.example.marsphotos.data.MarsPhotosRepository
-import com.example.marsphotos.model.MarsPhoto
+import com.example.rental.RentalApplication
+import com.example.rental.data.RentalRepository
+import com.example.rental.model.RentalProperty
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -34,53 +34,51 @@ import java.io.IOException
 /**
  * UI state for the Home screen
  */
-sealed interface MarsUiState {
-    data class Success(val photos: String) : MarsUiState
-    object Error : MarsUiState
-    object Loading : MarsUiState
+sealed interface RentalUiState {
+    data class Success(val listProperties: List<RentalProperty>) : RentalUiState
+    object Error : RentalUiState
+    object Loading : RentalUiState
 }
 
-class MarsViewModel(private val marsPhotosRepository: MarsPhotosRepository) : ViewModel() {
+class RentalViewModel(private val rentalRepository: RentalRepository) : ViewModel() {
     /** The mutable State that stores the status of the most recent request */
-    var marsUiState: MarsUiState by mutableStateOf(MarsUiState.Loading)
+    var rentalUiState: RentalUiState by mutableStateOf(RentalUiState.Loading)
         private set
 
     /**
-     * Call getMarsPhotos() on init so we can display status immediately.
+     * Call getRetalProperties() on init so we can display status immediately.
      */
     init {
-        getMarsPhotos()
+        getRetalProperties()
     }
 
     /**
-     * Gets Mars photos information from the Mars API Retrofit service and updates the
-     * [MarsPhoto] [List] [MutableList].
+     * Gets rental properties information from the Retrofit service and updates the
+     * [RentalProperty] [List] [MutableList].
      */
-    fun getMarsPhotos() {
+    fun getRetalProperties() {
         viewModelScope.launch {
-            marsUiState = MarsUiState.Loading
-            marsUiState = try {
-                val result = marsPhotosRepository.getMarsPhotos()[0]
-                MarsUiState.Success(
-                    "First Mars image URL:: ${result.imgSrc}"
-                )
+            rentalUiState = RentalUiState.Loading
+            rentalUiState = try {
+                val result = rentalRepository.getRentalProperties()
+                RentalUiState.Success(result)
             } catch (e: IOException) {
-                MarsUiState.Error
+                RentalUiState.Error
             } catch (e: HttpException) {
-                MarsUiState.Error
+                RentalUiState.Error
             }
         }
     }
 
     /**
-     * Factory for [MarsViewModel] that takes [MarsPhotosRepository] as a dependency
+     * Factory for [RentalViewModel] that takes [RentalRepository] as a dependency
      */
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val application = (this[APPLICATION_KEY] as MarsPhotosApplication)
-                val marsPhotosRepository = application.container.marsPhotosRepository
-                MarsViewModel(marsPhotosRepository = marsPhotosRepository)
+                val application = (this[APPLICATION_KEY] as RentalApplication)
+                val rRepository = application.container.rentalRepository
+                RentalViewModel(rentalRepository = rRepository)
             }
         }
     }

@@ -13,15 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.example.rental.fake
 
-package com.example.marsphotos.ui.theme
+import com.example.rental.model.RentalProperty
 
-import androidx.compose.ui.graphics.Color
+object FakeDataSource {
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
-
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+    private const val idOne = "1"
+    private const val idTwo = "img2"
+    private const val address1 = "url.one"
+    private const val picture1 = "picture.1"
+    val rentalList = listOf(
+        RentalProperty(
+            id = idOne,
+            Address = address1,
+            picture = picture1
+        ),
+        RentalProperty(
+            id = idOne,
+            Address = address1,
+            picture = picture1
+        )
+    )
+}

@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.example.rental.fake
 
-package com.example.marsphotos.ui.theme
+import com.example.rental.data.RentalRepository
+import com.example.rental.model.RentalProperty
 
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Shapes
-import androidx.compose.ui.unit.dp
-
-val Shapes = Shapes(
-    small = RoundedCornerShape(4.dp),
-    medium = RoundedCornerShape(16.dp),
-)
+class FakeNetworkRentalRepository : RentalRepository{
+    override suspend fun getRentalProperties(): List<RentalProperty> {
+        return FakeDataSource.rentalList
+    }
+}

@@ -23,13 +23,13 @@ plugins {
 }
 
 android {
-    namespace = "com.example.marsphotos"
-    compileSdk = 33
+    namespace = "com.example.rental"
+    compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.marsphotos"
-        minSdk = 24
-        targetSdk = 33
+        applicationId = "com.example.rental"
+        minSdk = 25
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -83,6 +83,8 @@ dependencies {
     // Retrofit
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    //Logging Network Calls
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.9.1")
     implementation("io.coil-kt:coil-compose:2.4.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
 

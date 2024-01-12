@@ -16,7 +16,7 @@
 
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.example.marsphotos.ui
+package com.example.rental.ui
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -33,31 +33,31 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.marsphotos.R
-import com.example.marsphotos.ui.screens.HomeScreen
-import com.example.marsphotos.ui.screens.MarsViewModel
+import com.example.rental.R
+import com.example.rental.ui.screens.HomeScreen
+import com.example.rental.ui.screens.RentalViewModel
 
 @Composable
-fun MarsPhotosApp() {
+fun rentalApp() {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = { MarsTopAppBar(scrollBehavior = scrollBehavior) }
+        topBar = { rentalTopAppBar(scrollBehavior = scrollBehavior) }
     ) {
         Surface(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(it)
         ) {
-            val marsViewModel: MarsViewModel =
-                viewModel(factory = MarsViewModel.Factory)
-            HomeScreen(marsUiState = marsViewModel.marsUiState)
+            val rentalViewModel: RentalViewModel =
+                viewModel(factory = RentalViewModel.Factory)
+            HomeScreen(rentalUiState = rentalViewModel.rentalUiState)
         }
     }
 }
 
 @Composable
-fun MarsTopAppBar(scrollBehavior: TopAppBarScrollBehavior, modifier: Modifier = Modifier) {
+fun rentalTopAppBar(scrollBehavior: TopAppBarScrollBehavior, modifier: Modifier = Modifier) {
     CenterAlignedTopAppBar(
         scrollBehavior = scrollBehavior,
         title = {

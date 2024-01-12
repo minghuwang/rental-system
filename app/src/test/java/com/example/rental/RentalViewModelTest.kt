@@ -13,33 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.marsphotos
+package com.example.rental
 
-import com.example.marsphotos.fake.FakeDataSource
-import com.example.marsphotos.fake.FakeNetworkMarsPhotosRepository
-import com.example.marsphotos.rules.TestDispatcherRule
-import com.example.marsphotos.ui.screens.MarsUiState
-import com.example.marsphotos.ui.screens.MarsViewModel
+import com.example.rental.fake.FakeDataSource.rentalList
+import com.example.rental.fake.FakeNetworkRentalRepository
+import com.example.rental.rules.TestDispatcherRule
+import com.example.rental.ui.screens.RentalUiState
+import com.example.rental.ui.screens.RentalViewModel
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 
-class MarsViewModelTest {
+class RentalViewModelTest {
 
     @get:Rule
     val testDispatcher = TestDispatcherRule()
 
     @Test
-    fun marsViewModel_getMarsPhotos_verifyMarsUiStateSuccess() =
+    fun rentalViewModel_fakeNetworkRentalRepository_verifyRentalUiStateSuccess() =
         runTest {
-            val marsViewModel = MarsViewModel(
-                marsPhotosRepository = FakeNetworkMarsPhotosRepository()
+            val rentalViewModel = RentalViewModel(
+                rentalRepository = FakeNetworkRentalRepository()
             )
             assertEquals(
-                MarsUiState.Success("Success: ${FakeDataSource.photosList.size} Mars " +
-                        "photos retrieved"),
-                marsViewModel.marsUiState
+                RentalUiState.Success(rentalList),
+                rentalViewModel.rentalUiState
             )
         }
 }

@@ -14,17 +14,31 @@
  * limitations under the License.
  */
 
-package com.example.marsphotos.model
+package com.example.rental.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * This data class defines a Mars photo which includes an ID, and the image URL.
+ * This data class defines a rental properties which includes an id, addres and picture address.
  */
 @Serializable
-data class MarsPhoto(
-    val id: String,
-    @SerialName(value = "img_src")
-    val imgSrc: String
+data class RentalProperty(
+    val PropertyID: Int,
+    val Address: String,
+    val PictureLink: String,
+    val OpenTime1: Int = 0,
+    val OpenTime2:Int = 0,
+)
+@Serializable
+data class Client(
+    @SerialName(value = "full_name")
+    val fullName: String,
+    val email: String
+)
+@Serializable
+data class VisitInfo(
+    val visitorEmail: String,
+    val propertiesAddr:String,
+    val visitTime:String,
 )
