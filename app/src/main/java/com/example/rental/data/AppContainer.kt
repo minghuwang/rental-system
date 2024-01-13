@@ -15,6 +15,7 @@
  */
 package com.example.rental.data
 
+import com.example.rental.baseUrl
 import com.example.rental.network.RentalService
 import retrofit2.Retrofit
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -36,7 +37,7 @@ interface AppContainer {
  * Variables are initialized lazily and the same instance is shared across the whole app.
  */
 class DefaultAppContainer : AppContainer {
-    private val baseUrl = "http://192.168.1.230:8088/"
+//    private val baseUrl = "http://192.168.1.230:8088/"
     val interceptor : HttpLoggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }

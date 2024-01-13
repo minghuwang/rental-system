@@ -18,9 +18,11 @@ package com.example.rental.ui.screens
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -42,8 +44,10 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.rental.R
+import com.example.rental.baseUrl
 import com.example.rental.model.RentalProperty
 import com.example.rental.ui.theme.RentalTheme
+import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 @Composable
 fun HomeScreen(
@@ -107,46 +111,56 @@ fun propertyCard(property: RentalProperty, modifier: Modifier = Modifier) {
         modifier = modifier
             .padding(4.dp)
             .fillMaxWidth()
-            .wrapContentHeight()
-            .aspectRatio(4f),
+            .aspectRatio(5f), // this defines the width and height ratio
         shape = MaterialTheme.shapes.small,
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
-        Column(
-            modifier = modifier,
-            verticalArrangement = Arrangement.Center
-        ) {
-//            AsyncImage(
-//                model = ImageRequest.Builder(context = LocalContext.current).data(property.PictureLink)
-//                    .crossfade(true).build(),
-//                error = painterResource(R.drawable.ic_broken_image),
-//                placeholder = painterResource(R.drawable.loading_img),
-//                contentDescription = stringResource(R.string.placeholder),
-//                contentScale = ContentScale.Crop,
-//                modifier = Modifier.fillMaxWidth()
+        Row {
+
+            AsyncImage(
+                model = ImageRequest.Builder(context = LocalContext.current)
+                    .data(baseUrl + property.PictureLink)
+                    .crossfade(true).build(),
+                error = painterResource(R.drawable.ic_broken_image),
+                placeholder = painterResource(R.drawable.loading_img),
+                contentDescription = stringResource(R.string.placeholder),
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.size(width = 80.dp, height = 80.dp)
+            )
+            Column(
+                modifier = modifier,
+                verticalArrangement = Arrangement.Center
+            ) {
+                // NetWork Image
+
+// Local image
+//            Image(
+//                modifier = modifier,
+//                painter = painterResource(id = R.drawable.pexels_photo),
+//                contentDescription = stringResource(id = R.string.big_house),
+//                contentScale = ContentScale.FillWidth,
 //            )
-
-            Text(
-                text = "PropertyID: ${property.PropertyID}",
-                style = MaterialTheme.typography.labelSmall
-            )
-            Text(
-                text = "Address: ${property.Address}",
-                style = MaterialTheme.typography.labelSmall
-            )
-            Text(
-                text = "PictureLink: ${property.PictureLink}",
-                style = MaterialTheme.typography.labelSmall
-            )
-            Text(
-                text = "OpenTime1: ${property.OpenTime1}",
-                style = MaterialTheme.typography.labelSmall
-            )
-            Text(
-                text = "OpenTime2: ${property.OpenTime2}",
-                style = MaterialTheme.typography.labelSmall
-            )
-
+//            Text(
+//                text = "PropertyID: ${property.PropertyID}",
+//                style = MaterialTheme.typography.labelSmall
+//            )
+                Text(
+                    text = "Address: ${property.Address}",
+                    style = MaterialTheme.typography.labelSmall
+                )
+//            Text(
+//                text = "PictureLink: ${property.PictureLink}",
+//                style = MaterialTheme.typography.labelSmall
+//            )
+                Text(
+                    text = "OpenTime1: ${property.OpenTime1}",
+                    style = MaterialTheme.typography.labelSmall
+                )
+                Text(
+                    text = "OpenTime2: ${property.OpenTime2}",
+                    style = MaterialTheme.typography.labelSmall
+                )
+            }
         }
     }
 }
