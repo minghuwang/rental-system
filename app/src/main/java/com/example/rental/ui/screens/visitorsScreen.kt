@@ -5,8 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun VisitInfoScreen(
+fun visitorsScreen(
     rentalUiState: RentalUiState, modifier: Modifier = Modifier
 ) {
-    Text("VisitInfo screen")
+    Text("Visitors screen")
 }

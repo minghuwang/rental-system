@@ -15,25 +15,24 @@
  */
 package com.example.rental.ui.screens
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -45,21 +44,26 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.rental.R
 import com.example.rental.baseUrl
 import com.example.rental.model.RentalProperty
+import com.example.rental.ui.Routes
 import com.example.rental.ui.theme.RentalTheme
 
 @Composable
 fun HomeScreen(
-    rentalUiState: RentalUiState, modifier: Modifier = Modifier
+    rentalUiState: RentalUiState,
+    modifier: Modifier = Modifier,
+    navController: NavController
 ) {
     when (rentalUiState) {
         is RentalUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
         is RentalUiState.Success -> resultScreen(
-            rentalUiState.listProperties, modifier = modifier.fillMaxWidth()
+            rentalUiState.listProperties, modifier = modifier.fillMaxWidth(), navController
         )
 
         is RentalUiState.Error -> ErrorScreen(modifier = modifier.fillMaxSize())
@@ -99,92 +103,104 @@ fun ErrorScreen(modifier: Modifier = Modifier) {
  * ResultScreen displaying number of photos retrieved.
  */
 @Composable
-fun resultScreen(properties: List<RentalProperty>, modifier: Modifier = Modifier) {
+fun resultScreen(
+    properties: List<RentalProperty>,
+    modifier: Modifier = Modifier,
+    navController: NavController
+) {
     LazyColumn(modifier = modifier) {
         items(properties) { property ->
-            propertyCard(property, modifier)
+            propertyCard(property, modifier, navController)
         }
     }
 
 }
 
 @Composable
-fun propertyCard(property: RentalProperty, modifier: Modifier = Modifier) {
+fun propertyCard(
+    property: RentalProperty,
+    modifier: Modifier = Modifier,
+    navController: NavController
+) {
     Card(
         modifier = modifier
             .padding(4.dp)
             .fillMaxWidth()
             .aspectRatio(5f), // this defines the width and height ratio
         shape = MaterialTheme.shapes.small,
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 12.dp)
     ) {
-        Row(modifier = modifier.fillMaxWidth()) {
-            Column(
-                modifier = modifier,
-                verticalArrangement = Arrangement.Center
+        Surface(
+            onClick = { navController.navigate(Routes.VISIT) }
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
             ) {
-                AsyncImage(
-                    model = ImageRequest.Builder(context = LocalContext.current)
-                        .data(baseUrl + property.PictureLink)
-                        .crossfade(true).build(),
-                    error = painterResource(R.drawable.ic_broken_image),
-                    placeholder = painterResource(R.drawable.loading_img),
-                    contentDescription = stringResource(R.string.placeholder),
-                    contentScale = ContentScale.Crop,
+                Column(
+                    modifier = Modifier.weight(1f),
+//                horizontalAlignment = Alignment.Start,
+//                verticalArrangement = Arrangement.Center
+                ) {
+                    AsyncImage(
+                        model = ImageRequest.Builder(context = LocalContext.current)
+                            .data(baseUrl + property.PictureLink)
+                            .crossfade(true).build(),
+                        error = painterResource(R.drawable.ic_broken_image),
+                        placeholder = painterResource(R.drawable.loading_img),
+                        contentDescription = stringResource(R.string.placeholder),
+                        contentScale = ContentScale.Crop,
 //                    modifier = Modifier.size(width = 80.dp, height = 80.dp)
-                    modifier = Modifier.aspectRatio(1f),
-                )
-            }
+                        modifier = Modifier.aspectRatio(1f),
+                    )
+                }
 
-            Column(
-                modifier = modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.Center
-            ) {
-                // NetWork Image
-
-// Local image
+                Column(
+                    modifier = Modifier.fillMaxHeight().weight(1f),
+//                horizontalAlignment = Alignment.CenterHorizontally,
+//                verticalArrangement = Arrangement.Center
+                ) {
+                    // Local image
 //            Image(
 //                modifier = modifier,
 //                painter = painterResource(id = R.drawable.pexels_photo),
 //                contentDescription = stringResource(id = R.string.big_house),
 //                contentScale = ContentScale.FillWidth,
 //            )
-//            Text(
-//                text = "PropertyID: ${property.PropertyID}",
-//                style = MaterialTheme.typography.labelSmall
-//            )
-                Text(
-                    text = "Address: ${property.Address}",
-                    style = MaterialTheme.typography.labelSmall
-                )
-//            Text(
-//                text = "PictureLink: ${property.PictureLink}",
-//                style = MaterialTheme.typography.labelSmall
-//            )
-                Text(
-                    text = "OpenTime1: ${property.OpenTime1}",
-                    style = MaterialTheme.typography.labelSmall
-                )
-                Text(
-                    text = "OpenTime2: ${property.OpenTime2}",
-                    style = MaterialTheme.typography.labelSmall
-                )
-                Row(modifier = modifier,
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.Bottom
-                ) {
 
-                    Button(
-                        modifier = Modifier,
-                        onClick = { }
-                    ) {
-                        Text(
-                            text = stringResource(R.string.apply),
-                            fontSize = 8.sp
-                        )
-                    }
+                    Text(
+                        modifier = modifier,
+                        text = "Address: ${property.Address}",
+                        style = MaterialTheme.typography.labelSmall
+                    )
+                    Text(
+                        modifier = modifier,
+                        text = "OpenTime1: ${property.OpenTime1}",
+                        style = MaterialTheme.typography.labelSmall
+                    )
+                    Text(
+                        modifier = modifier,
+                        text = "OpenTime2: ${property.OpenTime2}",
+                        style = MaterialTheme.typography.labelSmall
+                    )
+
                 }
-
+//            Column(
+//                modifier = Modifier.aspectRatio(1f).weight(1f),
+////                horizontalAlignment = Alignment.End,
+////                verticalArrangement = Arrangement.Center
+//            ) {
+//
+//                Button(
+//                    modifier = modifier.fillMaxHeight().aspectRatio(1f),
+//                    onClick = { navController.navigate(Routes.VISIT) }
+//                ) {
+//                    Text(
+//                        modifier = modifier,
+//                        text = stringResource(R.string.apply),
+//                        fontSize = 6.sp
+//                    )
+//                }
+//            }
             }
         }
     }
@@ -213,6 +229,6 @@ fun resultScreenPreview() {
         val mockData = List(10) {
             RentalProperty(PropertyID = it, Address = "xxx address", PictureLink = "pic")
         }
-        resultScreen(mockData)
+        resultScreen(mockData, navController = rememberNavController())
     }
 }

@@ -43,22 +43,38 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.example.rental.R
+import com.example.rental.ui.screens.applyVisitScreen
 import com.example.rental.ui.screens.ClientScreen
 import com.example.rental.ui.screens.HomeScreen
 import com.example.rental.ui.screens.RentalViewModel
-import com.example.rental.ui.screens.VisitInfoScreen
+import com.example.rental.ui.screens.visitorsScreen
 
 
 object Routes {
     const val PROPERTIES: String = "properties"
     const val CLIENTS: String = "clients"
-    const val VISITINFO: String = "visitInfo"
+    const val VISITORS: String = "visitors"
+    const val VISIT: String = "visit" // Virtual nested graph
+
+    object ApplyVisitDirections {
+        val root = object : NavigationCommand {
+            override val arguments = emptyList<NamedNavArgument>()
+            override val destination = "applyvisit"
+        }
+//    val root = object: NavigationCommand {
+//        override val arguments = emptyList<NamedNavArgument>()
+//        override val destination = "authentication"
+//    }
+    }
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -80,9 +96,9 @@ fun rentalApp(
             route = Routes.CLIENTS
         ),
         BarItem(
-            title = "VisitInfo",
+            title = "Visitors",
             icon = Icons.Filled.Email,
-            route = Routes.VISITINFO
+            route = Routes.VISITORS
         ),
     )
     Scaffold(
@@ -100,16 +116,7 @@ fun rentalApp(
                 }
             }
         }
-    ) {innerPadding ->
-
-
-//        Surface(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .padding(it)
-//        ) {
-
-
+    ) { innerPadding ->
         val rentalViewModel: RentalViewModel =
             viewModel(factory = RentalViewModel.Factory)
         NavHost(
@@ -119,36 +126,26 @@ fun rentalApp(
         ) {
             composable(route = Routes.PROPERTIES) {
                 HomeScreen(
-                    rentalUiState = rentalViewModel.rentalUiState
-//                    onNextButtonClicked = {
-//                        viewModel.setQuantity(it)
-//                        navController.navigate(CupcakeScreen.Flavor.name)
-//
-//                    }
+                    rentalUiState = rentalViewModel.rentalUiState,
+                    navController = navController
                 )
+            }
+            navigation(
+                startDestination = Routes.ApplyVisitDirections.root.destination, // The true composable route, if not found, error comes.
+                route = Routes.VISIT // virtual name of the nested graph
+            ) {
+                composable(route = Routes.ApplyVisitDirections.root.destination) {
+                    applyVisitScreen(rentalUiState = rentalViewModel.rentalUiState)
+                }
+
+                // TODO: Add more...
             }
             composable(route = Routes.CLIENTS) {
-                ClientScreen(
-                    rentalUiState = rentalViewModel.rentalUiState
-//                    onNextButtonClicked = {
-//                        viewModel.setQuantity(it)
-//                        navController.navigate(CupcakeScreen.Flavor.name)
-//
-//                    }
-                )
+                ClientScreen(rentalUiState = rentalViewModel.rentalUiState)
             }
-            composable(route = Routes.VISITINFO) {
-                VisitInfoScreen(
-                    rentalUiState = rentalViewModel.rentalUiState
-//                    onNextButtonClicked = {
-//                        viewModel.setQuantity(it)
-//                        navController.navigate(CupcakeScreen.Flavor.name)
-//
-//                    }
-                )
+            composable(route = Routes.VISITORS) {
+                visitorsScreen(rentalUiState = rentalViewModel.rentalUiState)
             }
-
-//        }
         }
     }
 }
