@@ -18,40 +18,137 @@
 
 package com.example.rental.ui
 
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.rental.R
+import com.example.rental.ui.screens.ClientScreen
 import com.example.rental.ui.screens.HomeScreen
 import com.example.rental.ui.screens.RentalViewModel
+import com.example.rental.ui.screens.VisitInfoScreen
 
+
+object Routes {
+    const val PROPERTIES: String = "properties"
+    const val CLIENTS: String = "clients"
+    const val VISITINFO: String = "visitInfo"
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun rentalApp() {
+fun rentalApp(
+    navController: NavHostController = rememberNavController()
+) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    var selectedItem by remember { mutableStateOf(0) }
+
+    val barItems = listOf(
+        BarItem(
+            title = "Properties",
+            icon = Icons.Filled.Home,
+            route = Routes.PROPERTIES
+        ),
+        BarItem(
+            title = "Clients",
+            icon = Icons.Filled.Face,
+            route = Routes.CLIENTS
+        ),
+        BarItem(
+            title = "VisitInfo",
+            icon = Icons.Filled.Email,
+            route = Routes.VISITINFO
+        ),
+    )
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = { rentalTopAppBar(scrollBehavior = scrollBehavior) }
-    ) {
-        Surface(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(it)
+        topBar = { rentalTopAppBar(scrollBehavior = scrollBehavior) },
+        bottomBar = {
+            NavigationBar {
+                barItems.forEachIndexed { index, barItem ->
+                    NavigationBarItem(
+                        selected = selectedItem == index,
+                        onClick = { navController.navigate(barItem.route) },
+                        icon = { Icon(barItem.icon, contentDescription = barItem.title) },
+                        label = { Text(barItem.title) }
+                    )
+                }
+            }
+        }
+    ) {innerPadding ->
+
+
+//        Surface(
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .padding(it)
+//        ) {
+
+
+        val rentalViewModel: RentalViewModel =
+            viewModel(factory = RentalViewModel.Factory)
+        NavHost(
+            navController = navController,
+            startDestination = Routes.PROPERTIES,
+            Modifier.padding(innerPadding)
         ) {
-            val rentalViewModel: RentalViewModel =
-                viewModel(factory = RentalViewModel.Factory)
-            HomeScreen(rentalUiState = rentalViewModel.rentalUiState)
+            composable(route = Routes.PROPERTIES) {
+                HomeScreen(
+                    rentalUiState = rentalViewModel.rentalUiState
+//                    onNextButtonClicked = {
+//                        viewModel.setQuantity(it)
+//                        navController.navigate(CupcakeScreen.Flavor.name)
+//
+//                    }
+                )
+            }
+            composable(route = Routes.CLIENTS) {
+                ClientScreen(
+                    rentalUiState = rentalViewModel.rentalUiState
+//                    onNextButtonClicked = {
+//                        viewModel.setQuantity(it)
+//                        navController.navigate(CupcakeScreen.Flavor.name)
+//
+//                    }
+                )
+            }
+            composable(route = Routes.VISITINFO) {
+                VisitInfoScreen(
+                    rentalUiState = rentalViewModel.rentalUiState
+//                    onNextButtonClicked = {
+//                        viewModel.setQuantity(it)
+//                        navController.navigate(CupcakeScreen.Flavor.name)
+//
+//                    }
+                )
+            }
+
+//        }
         }
     }
 }
@@ -69,3 +166,10 @@ fun rentalTopAppBar(scrollBehavior: TopAppBarScrollBehavior, modifier: Modifier 
         modifier = modifier
     )
 }
+
+
+data class BarItem(
+    val icon: ImageVector,
+    val title: String,
+    val route: String
+)

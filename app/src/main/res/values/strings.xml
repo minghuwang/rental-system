@@ -21,4 +21,5 @@
     <string name="placeholder">Placeholder text</string>
     <string name="rental_properties">Rental Properties</string>
     <string name="big_house">Big House</string>
+    <string name="apply">Apply</string>
 </resources>

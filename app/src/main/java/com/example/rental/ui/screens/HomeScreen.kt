@@ -15,6 +15,7 @@
  */
 package com.example.rental.ui.screens
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -28,9 +29,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -41,13 +44,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.rental.R
 import com.example.rental.baseUrl
 import com.example.rental.model.RentalProperty
 import com.example.rental.ui.theme.RentalTheme
-import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 @Composable
 fun HomeScreen(
@@ -115,20 +118,26 @@ fun propertyCard(property: RentalProperty, modifier: Modifier = Modifier) {
         shape = MaterialTheme.shapes.small,
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
-        Row {
-
-            AsyncImage(
-                model = ImageRequest.Builder(context = LocalContext.current)
-                    .data(baseUrl + property.PictureLink)
-                    .crossfade(true).build(),
-                error = painterResource(R.drawable.ic_broken_image),
-                placeholder = painterResource(R.drawable.loading_img),
-                contentDescription = stringResource(R.string.placeholder),
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.size(width = 80.dp, height = 80.dp)
-            )
+        Row(modifier = modifier.fillMaxWidth()) {
             Column(
                 modifier = modifier,
+                verticalArrangement = Arrangement.Center
+            ) {
+                AsyncImage(
+                    model = ImageRequest.Builder(context = LocalContext.current)
+                        .data(baseUrl + property.PictureLink)
+                        .crossfade(true).build(),
+                    error = painterResource(R.drawable.ic_broken_image),
+                    placeholder = painterResource(R.drawable.loading_img),
+                    contentDescription = stringResource(R.string.placeholder),
+                    contentScale = ContentScale.Crop,
+//                    modifier = Modifier.size(width = 80.dp, height = 80.dp)
+                    modifier = Modifier.aspectRatio(1f),
+                )
+            }
+
+            Column(
+                modifier = modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.Center
             ) {
                 // NetWork Image
@@ -160,6 +169,22 @@ fun propertyCard(property: RentalProperty, modifier: Modifier = Modifier) {
                     text = "OpenTime2: ${property.OpenTime2}",
                     style = MaterialTheme.typography.labelSmall
                 )
+                Row(modifier = modifier,
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.Bottom
+                ) {
+
+                    Button(
+                        modifier = Modifier,
+                        onClick = { }
+                    ) {
+                        Text(
+                            text = stringResource(R.string.apply),
+                            fontSize = 8.sp
+                        )
+                    }
+                }
+
             }
         }
     }
